@@ -11,6 +11,18 @@ contract Community is Initializable, ERC721Upgradeable, OwnableUpgradeable {
     CountersUpgradeable.Counter private _tokenIdCounter;
 
     uint256 public x;
+    CommunityDetails public communityDetails;
+
+    struct CommunityDetails {
+        string name;
+        string symbol;
+        string description;
+        string logoURL;
+        string bannerURL;
+        string nftImageURL;
+        uint256 nftPrice;
+        uint256 nftSupply;
+    }
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -20,11 +32,18 @@ contract Community is Initializable, ERC721Upgradeable, OwnableUpgradeable {
     function initialize(
         string memory name,
         string memory symbol,
+        string memory logoURL,
+        string memory bannerURL,
+        string memory description,
+        string memory nftImageURL,
+        uint256 _nftSupply,
+        uint256 _mintPrice,
         address _owner
     ) public initializer {
         __ERC721_init(name, symbol);
         __Ownable_init();
         _transferOwnership(_owner);
+        communityDetails = CommunityDetails(name, symbol, description, logoURL, bannerURL, nftImageURL, _mintPrice, _nftSupply);
     }
 
     function safeMint(address to) public onlyOwner {
