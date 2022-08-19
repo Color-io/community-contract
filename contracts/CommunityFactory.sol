@@ -15,10 +15,30 @@ contract CommunityFactory {
         beacon = new CommunityBeacon(_initBlueprint);
     }
 
-    function createCommunity(string memory _name, string memory _symbol) public {
+    function createCommunity(
+        string memory _name,
+        string memory _symbol,
+        string memory _logoURL,
+        string memory _bannerURL,
+        string memory _description,
+        string memory _nftImageURL,
+        uint256 _nftSupply,
+        uint256 _mintPrice
+    ) public {
         BeaconProxy community = new BeaconProxy(
             address(beacon),
-            abi.encodeWithSelector(Community(address(0)).initialize.selector, _name, _symbol, msg.sender)
+            abi.encodeWithSelector(
+                Community(address(0)).initialize.selector,
+                _name,
+                _symbol,
+                _description,
+                _logoURL,
+                _bannerURL,
+                _nftImageURL,
+                _mintPrice,
+                _nftSupply,
+                msg.sender
+            )
         );
         communities[msg.sender].push(address(community));
     }

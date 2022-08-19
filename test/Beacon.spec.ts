@@ -1,16 +1,42 @@
 import {expect} from 'chai';
 import {ethers} from 'hardhat';
 import {loadFixture} from '@nomicfoundation/hardhat-network-helpers';
+import {Community, CommunityFactory__factory, CommunityV2__factory, Community__factory} from '../typechain-types';
+
+const nftCommunityDummyData = [
+  {
+    name: 'BABA',
+    symbol: 'BABANFT',
+    logoUrl: 'https://jingculturecommerce.com/wp-content/uploads/2021/09/sothebys-bored-kennel-1024x678.jpg',
+    bannerUrl: 'https://jingculturecommerce.com/wp-content/uploads/2021/09/sothebys-bored-kennel-1024x678.jpg',
+    description: 'BABA',
+    nftImageUrl: 'https://jingculturecommerce.com/wp-content/uploads/2021/09/sothebys-bored-kennel-1024x678.jpg',
+    nftSupply: 100,
+    mintPrice: 1,
+  },
+  {
+    name: 'LALA',
+    symbol: 'LALANFT',
+    logoUrl: 'https://jingculturecommerce.com/wp-content/uploads/2021/09/sothebys-bored-kennel-1024x678.jpg',
+    bannerUrl: 'https://jingculturecommerce.com/wp-content/uploads/2021/09/sothebys-bored-kennel-1024x678.jpg',
+    description: 'LALA',
+    nftImageUrl: 'https://jingculturecommerce.com/wp-content/uploads/2021/09/sothebys-bored-kennel-1024x678.jpg',
+    nftSupply: 123,
+    mintPrice: 2,
+  },
+];
+
+type CreateCommunityParameters = [string, string, string, string, string, string, number, number];
 
 describe('Community', async function () {
   async function deployCommunityFixture() {
-    const Community = await ethers.getContractFactory('Community');
+    const Community = (await ethers.getContractFactory('Community')) as Community__factory;
     const community = await Community.deploy();
 
-    const CommunityFactory = await ethers.getContractFactory('CommunityFactory');
+    const CommunityFactory = (await ethers.getContractFactory('CommunityFactory')) as CommunityFactory__factory;
     const communityFactory = await CommunityFactory.deploy(community.address);
 
-    const CommunityV2 = await ethers.getContractFactory('CommunityV2');
+    const CommunityV2 = (await ethers.getContractFactory('CommunityV2')) as CommunityV2__factory;
     const communityV2 = await CommunityV2.deploy();
 
     return {community, communityFactory, communityV2};
@@ -42,14 +68,16 @@ describe('Community', async function () {
         const [owner, communityCreator] = await ethers.getSigners();
         const {communityFactory} = await loadFixture(deployCommunityFixture);
 
-        await communityFactory.connect(communityCreator).createCommunity('BABA', 'BABANFT');
+        await communityFactory
+          .connect(communityCreator)
+          .createCommunity(...(Object.values(nftCommunityDummyData[0]) as CreateCommunityParameters));
         const creatorCommunities = await communityFactory.getOwnerCommunities(communityCreator.address);
 
         expect(creatorCommunities).to.not.be.null;
         expect(creatorCommunities).to.not.be.undefined;
         expect(creatorCommunities.length).to.equal(1);
 
-        const createdCommunity = await ethers.getContractAt('Community', creatorCommunities[0]);
+        const createdCommunity = (await ethers.getContractAt('Community', creatorCommunities[0])) as Community;
         expect(await createdCommunity.name()).to.equal('BABA');
         expect(await createdCommunity.symbol()).to.equal('BABANFT');
       });
@@ -58,7 +86,9 @@ describe('Community', async function () {
         const [owner, communityCreator] = await ethers.getSigners();
         const {communityFactory} = await loadFixture(deployCommunityFixture);
 
-        await communityFactory.connect(communityCreator).createCommunity('LALA', 'LALANFT');
+        await communityFactory
+          .connect(communityCreator)
+          .createCommunity(...(Object.values(nftCommunityDummyData[1]) as CreateCommunityParameters));
         const creatorCommunities = await communityFactory.getOwnerCommunities(communityCreator.address);
 
         const createdCommunity = await ethers.getContractAt('Community', creatorCommunities[0]);
