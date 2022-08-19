@@ -1,20 +1,15 @@
 import {ethers} from 'hardhat';
+import {CommunityFactory__factory, Community__factory} from '../typechain-types';
 
 async function main() {
-  // Hardhat always runs the compile task when running scripts with its command
-  // line interface.
-  //
-  // If this script is run directly using `node` you may want to call compile
-  // manually to make sure everything is compiled
-  // await hre.run('compile');
+  const Community = (await ethers.getContractFactory('Community')) as Community__factory;
+  const community = await Community.deploy();
 
-  // We get the contract to deploy
-  const Greeter = await ethers.getContractFactory('Greeter');
-  const greeter = await Greeter.deploy('Hello, Hardhat!');
+  const CommunityFactory = (await ethers.getContractFactory('CommunityFactory')) as CommunityFactory__factory;
+  const communityFactory = await CommunityFactory.deploy(community.address);
 
-  await greeter.deployed();
-
-  console.log('Greeter deployed to:', greeter.address);
+  console.log('Community address: ', community.address);
+  console.log('CommunityFactory address: ', communityFactory.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
