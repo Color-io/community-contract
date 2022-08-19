@@ -3,12 +3,14 @@ import {CommunityFactory__factory, Community__factory} from '../typechain-types'
 
 async function main() {
   const Community = (await ethers.getContractFactory('Community')) as Community__factory;
-  const community = await Community.deploy();
-
   const CommunityFactory = (await ethers.getContractFactory('CommunityFactory')) as CommunityFactory__factory;
-  const communityFactory = await CommunityFactory.deploy(community.address);
 
+  const community = await Community.deploy();
   console.log('Community address: ', community.address);
+
+  await community.deployed();
+
+  const communityFactory = await CommunityFactory.deploy(community.address);
   console.log('CommunityFactory address: ', communityFactory.address);
 }
 
