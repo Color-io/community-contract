@@ -12,7 +12,7 @@ const nftCommunityDummyData = [
     description: 'BABA',
     nftImageUrl: 'https://jingculturecommerce.com/wp-content/uploads/2021/09/sothebys-bored-kennel-1024x678.jpg',
     nftSupply: 100,
-    mintPrice: 1,
+    mintPrice: ethers.utils.parseEther('0.1'),
   },
   {
     name: 'LALA',
@@ -22,7 +22,7 @@ const nftCommunityDummyData = [
     description: 'LALA',
     nftImageUrl: 'https://jingculturecommerce.com/wp-content/uploads/2021/09/sothebys-bored-kennel-1024x678.jpg',
     nftSupply: 123,
-    mintPrice: 2,
+    mintPrice: ethers.utils.parseEther('0.1'),
   },
 ];
 
