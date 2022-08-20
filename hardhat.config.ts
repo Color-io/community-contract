@@ -39,6 +39,10 @@ const config: HardhatUserConfig = {
       url: `https://eth-goerli.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY || ''}`,
       accounts: [process.env.GOERLI_PRIVATE_KEY || ''],
     },
+    mumbai: {
+      url: `https://polygon-mumbai.g.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY || ''}`,
+      accounts: [process.env.GOERLI_PRIVATE_KEY || ''],
+    },
   },
   etherscan: {
     // Your API key for Etherscan

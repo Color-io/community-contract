@@ -42,3 +42,6 @@ deploy_gnet:
 
 deploy_glnet:
 	npx hardhat run scripts/deploy.ts --network goerli
+
+deploy_mnet:
+	npx hardhat run scripts/deploy.ts --network mumbai
